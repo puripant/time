@@ -30,6 +30,6 @@ How can I adjust any customization I mentioned earlier?
     - the text color selector doesn't shown the current default color
 
 For some reasons, ChatGPT failed to do some stylings so I will add some minor adjustments. Below are some todos.
-- The heights of all input fields should be the same.
+- ~~The heights of all input fields should be the same.~~
 - When the seconds are shown, they should not move/push the hours and minutes to the left
 - The seconds should be top-aligned with the hours and minutes?

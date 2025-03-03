@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customizable Clock</title>
+    <title>Big Clock</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -26,33 +26,28 @@
         .time-container {
             display: flex;
             align-items: center;
-            font-size: 8rem;
-            font-weight: bold;
+            font-size: 16rem;
+            line-height: 16rem;
         }
         .hidden-zero {
             color: #111;
         }
         .seconds {
-            font-size: 4rem;
-            margin-left: 10px;
+            margin-left: 1rem;
+            font-size: 8rem;
             display: none;
+            /* visibility: hidden; */
         }
-        .info {
-            font-size: 2rem;
-            margin-top: 10px;
-        }
-        .custom-text {
-            font-size: 2rem;
-            margin-top: 5px;
+        .info, .custom-text {
+            font-size: 4rem;
+            line-height: 5rem;
         }
         .controls {
-            margin-top: 20px;
             display: none;
             position: absolute;
-            bottom: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 10px;
+            bottom: 0px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
         }
         body:hover .controls {
             display: flex;
@@ -76,9 +71,12 @@
             border: 2px solid #fff;
             background: transparent;
             color: #fff;
-            padding: 5px;
-            text-align: center;
+            padding: 3px;
+            text-align: left;
             height: 30px;
+        }
+        input[type="text"], input[type="time"] {
+            height: 20px;
         }
         input[type="text"]::placeholder {
             color: #ccc;
@@ -110,11 +108,11 @@
         </div>
         <div class="control-item">
             <label for="endTimeInput">End Time:</label>
-            <input type="time" id="endTimeInput" value="23:00">
+            <input type="time" id="endTimeInput" value="10:30">
         </div>
     </div>
     <script>
-        let endTime = "23:00";
+        let endTime = "10:30";
         let showSecondsBefore = 30 * 60 * 1000; 
         let customText = "";
         
@@ -139,10 +137,12 @@
             const timeDiff = endDate - now;
             
             if (timeDiff > 0 && timeDiff <= showSecondsBefore) {
-                document.getElementById('seconds').style.display = 'inline';
                 document.getElementById('seconds').textContent = `:${seconds}`;
+                document.getElementById('seconds').style.display = 'inline';
+                // document.getElementById('seconds').style.visibility = 'visible';
             } else {
                 document.getElementById('seconds').style.display = 'none';
+                // document.getElementById('seconds').style.visibility = 'hidden';
             }
         }
         
