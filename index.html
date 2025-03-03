@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customizable Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #111;
+            color: #fff;
+            text-align: center;
+        }
+        .clock-container {
+            opacity: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .time-container {
+            display: flex;
+            align-items: center;
+            font-size: 8rem;
+            font-weight: bold;
+        }
+        .hidden-zero {
+            color: #111;
+        }
+        .seconds {
+            font-size: 4rem;
+            margin-left: 10px;
+            display: none;
+        }
+        .info {
+            font-size: 2rem;
+            margin-top: 10px;
+        }
+        .custom-text {
+            font-size: 2rem;
+            margin-top: 5px;
+        }
+        .controls {
+            margin-top: 20px;
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        body:hover .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: space-between;
+            width: 320px;
+        }
+        label {
+            flex: 1;
+            text-align: right;
+            min-width: 120px;
+        }
+        input[type="color"], input[type="text"], input[type="time"] {
+            flex: 1;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            height: 30px;
+        }
+        input[type="text"]::placeholder {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container" id="clock">
+        <div class="time-container">
+            <span id="leadingZero" class="hidden-zero">0</span>
+            <span id="time"></span>
+            <span class="seconds" id="seconds"></span>
+        </div>
+    </div>
+    <div class="info" id="info"></div>
+    <div class="custom-text" id="customText"></div>
+    <div class="controls">
+        <div class="control-item">
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor" value="#111">
+        </div>
+        <div class="control-item">
+            <label for="textColor">Text Color:</label>
+            <input type="color" id="textColor" value="#ffffff">
+        </div>
+        <div class="control-item">
+            <label for="customTextInput">Custom Text:</label>
+            <input type="text" id="customTextInput" placeholder="Enter text">
+        </div>
+        <div class="control-item">
+            <label for="endTimeInput">End Time:</label>
+            <input type="time" id="endTimeInput" value="23:00">
+        </div>
+    </div>
+    <script>
+        let endTime = "23:00";
+        let showSecondsBefore = 30 * 60 * 1000; 
+        let customText = "";
+        
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('leadingZero').style.color = hours.startsWith('0') ? '#111' : document.body.style.color;
+            document.getElementById('leadingZero').textContent = hours.startsWith('0') ? '0' : '';
+            document.getElementById('time').textContent = `${hours.replace(/^0/, '')}:${minutes}`;
+            
+            const day = now.toLocaleDateString(undefined, { weekday: 'long' });
+            const date = now.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('info').textContent = `${day}, ${date}`;
+            document.getElementById('customText').textContent = customText;
+            
+            const [endHour, endMinute] = endTime.split(':').map(Number);
+            const endDate = new Date();
+            endDate.setHours(endHour, endMinute, 0, 0);
+            const timeDiff = endDate - now;
+            
+            if (timeDiff > 0 && timeDiff <= showSecondsBefore) {
+                document.getElementById('seconds').style.display = 'inline';
+                document.getElementById('seconds').textContent = `:${seconds}`;
+            } else {
+                document.getElementById('seconds').style.display = 'none';
+            }
+        }
+        
+        document.getElementById('bgColor').addEventListener('input', function() {
+            document.body.style.backgroundColor = this.value;
+        });
+        
+        document.getElementById('textColor').addEventListener('input', function() {
+            document.body.style.color = this.value;
+            document.getElementById('textColor').value = this.value;
+        });
+        
+        document.getElementById('customTextInput').addEventListener('input', function() {
+            customText = this.value;
+            document.getElementById('customText').textContent = customText;
+        });
+        
+        document.getElementById('endTimeInput').addEventListener('input', function() {
+            endTime = this.value;
+        });
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
